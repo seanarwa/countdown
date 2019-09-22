@@ -1,0 +1,29 @@
+os:
+  - linux
+language: minimal
+sudo: false
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libstdc++6
+      - fonts-noto
+git:
+  depth: 3
+before_script:
+  - git clone https://github.com/flutter/flutter.git -b stable
+  - ./flutter/bin/flutter doctor
+  - chmod +x test/travis_entrypoint.sh
+  - pwd && ls
+script:
+  - ./flutter/bin/flutter test
+cache:
+  directories:
+    - $HOME/shared/.pub-cache
+notifications:
+  email:
+    recipients:
+    - seanarwa@gmail.com
+    on_success: never
+    on_failure: always
