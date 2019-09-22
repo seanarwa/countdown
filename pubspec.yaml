@@ -39,7 +39,7 @@ dev_dependencies:
 # > flutter pub run flutter_launcher_icons:main
 #
 flutter_icons:
-  image_path: "images/app_icon.jpg"
+  image_path: "images/app_icon.png"
   android: true
   ios: true
 
