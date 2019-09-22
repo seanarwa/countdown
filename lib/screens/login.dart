@@ -37,9 +37,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Container(margin: EdgeInsets.all(10)),
             GoogleSignInButton(
-              onPressed: () {
-                Auth.googleSignIn();
-              },
+              onPressed: Auth.googleSignIn,
             ),
           ],
         ),

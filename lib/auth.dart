@@ -10,10 +10,11 @@ class Auth {
   static final FirebaseDatabase _db = FirebaseDatabase.instance;
 
   static checkState(context, {redirect}) {
-    Auth.authState().listen((user) {
+    _auth.onAuthStateChanged.listen((user) {
       if(user == null) {
-        print("User is not signed in, redirecting to ${redirect ?? '/login'} ...");
-        Navigator.pushReplacementNamed(context, redirect ?? '/login');
+        final path = redirect ?? '/login';
+        print("User is not signed in, redirecting to $path ...");
+        Navigator.pushReplacementNamed(context, path);
       }
     });
   }
@@ -22,8 +23,10 @@ class Auth {
     DatabaseReference _userRef = _db.reference().child('user');
     getUser().then((user) {
       _userRef.child(user.uid).once().then((snapshot) {
-        if(snapshot.value == null)
+        if(snapshot.value == null) {
+          print("New user detected. Pushing new user to db ...");
           _pushUserToDB(user);
+        }
       });
     });
   }

@@ -27,6 +27,10 @@ class _HomePageState extends State<HomePage> {
             Text(
               'Home Page',
             ),
+            RaisedButton(
+              child: Text('Sign out'),
+              onPressed: Auth.signOut,
+            )
           ],
         ),
       ),
