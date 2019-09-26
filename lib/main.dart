@@ -11,7 +11,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Countdown',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.black,
+        canvasColor: Colors.black,
+        fontFamily: 'TeXGyreAdventor',
+        textTheme: TextTheme(
+          headline: TextStyle(fontSize: 72.0, fontFamily: 'TeXGyreAdventor', color: Colors.white),
+          title: TextStyle(fontSize: 36.0, fontFamily: 'TeXGyreAdventor', color: Colors.white),
+          body1: TextStyle(fontSize: 14.0, fontFamily: 'TeXGyreAdventor', color: Colors.white),
+        ),
       ),
       initialRoute: '/',
       routes: {

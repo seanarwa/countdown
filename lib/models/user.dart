@@ -10,4 +10,5 @@ class User {
   String displayName;
   String email;
   String photoUrl;
+  int deathTime;
 }
