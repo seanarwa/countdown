@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:countdown/auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class TimerPage extends StatefulWidget {
-  TimerPage({Key key}) : super(key: key);
+  TimerPage({Key key, this.isClosed}) : super(key: key);
+
+  final bool isClosed;
 
   @override
   _TimerPageState createState() => _TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage> {
+class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMixin {
 
-  final TextStyle numberStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 70);
+  static final FirebaseDatabase _db = FirebaseDatabase.instance;
+
+  TextStyle numberStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 75);
+  TextStyle textStyle = TextStyle(fontWeight: FontWeight.bold);
 
   Timer _timer;
   Map<String, int> duration;
 
   bool _isDead = false;
-  var _deathTime = _getTestTimer();
+  DateTime _deathTime;
 
   Map<String, int> _getDuration() {
     Duration diff = _deathTime.difference(new DateTime.now());
@@ -50,90 +58,84 @@ class _TimerPageState extends State<TimerPage> {
     );
   }
 
-  String _getFormattedDuration() {
-    if(duration == null) return "";
-    return "${duration["years"]}y ${duration["days"]}d ${duration["hours"]}h ${duration["minutes"]}m ${duration["seconds"]}s";
-  }
-
   void _startDeath() {
     this._isDead = true;
   }
 
-  static DateTime _getTestTimer() {
-    return new DateTime.now().add(new Duration(hours: 0, minutes: 0, seconds: 10));
+  TableRow _getTableRow(num, suffix) {
+    return TableRow(
+      children: [
+        AutoSizeText(
+          duration[num].toString().padLeft(2, '0'),
+          style: numberStyle,
+          minFontSize: 50,
+          textAlign: TextAlign.right,
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10),
+          child: Text(
+            suffix,
+            style: textStyle,
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ]
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    _startTimer();
+
+    // check user death time
+    DatabaseReference _userRef = _db.reference().child('user');
+    Auth.getUser().then((user) {
+      if(user == null) {
+        print("ERROR: Auth user is null");
+        return;
+      }
+      _userRef.child('${user.uid}/deathTime').once().then((snapshot) {
+        if(snapshot.value == null) {
+          print("ERROR: no death time found for user " + user.uid);
+        } else {
+          print("Successfully fetched death time from DB");
+          setState(() {
+            _deathTime = new DateTime.now().add(new Duration(seconds: snapshot.value));
+            _startTimer();
+          });
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if(!widget.isClosed) {
+      return Container();
+    }
     if(duration == null) {
       return Center(child: CircularProgressIndicator());
     }
     return Center(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.25),
+        margin: EdgeInsets.only(left: 50),
         child: Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
           children: [
-            TableRow(children: [Text("${duration["years"]}", style: numberStyle,), Text("YRS"),]),
-            TableRow(children: [Text("${duration["days"]}", style: numberStyle,), Text("DAY"),]),
-            TableRow(children: [Text("${duration["hours"]}", style: numberStyle,), Text("HRS"),]),
-            TableRow(children: [Text("${duration["minutes"]}", style: numberStyle,), Text("MIN"),]),
-            TableRow(children: [Text("${duration["seconds"]}", style: numberStyle,), Text("SEC"),]),
+            _getTableRow("years", "Y R S\n"),
+            _getTableRow("days", "D A Y\n"),
+            _getTableRow("hours", "H R S\n"),
+            _getTableRow("minutes", "M I N\n"),
+            _getTableRow("seconds", "S E C\n"),
           ],
         ),
-      ),
-    );
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("${duration["years"]}", style: numberStyle,),
-              Text("${duration["days"]}", style: numberStyle),
-              Text("${duration["hours"]}", style: numberStyle),
-              Text("${duration["minutes"]}", style: numberStyle),
-              Text("${duration["seconds"]}", style: numberStyle),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text("YRS"),
-                Text("DAY"),
-                Text("HRS"),
-                Text("MIN"),
-                Text("SEC"),
-              ],
-            ),
-          ),
-          RaisedButton(
-            child: Text('reset'),
-            onPressed: () {
-              setState(() {
-                _deathTime = _getTestTimer();
-                _isDead = false;
-                _startTimer();
-              });
-            },
-          ),
-        ],
       ),
     );
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 

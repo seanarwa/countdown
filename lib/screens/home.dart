@@ -16,6 +16,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   var _isClosed = true;
+  final PanelController _pc = new PanelController();
+
+  void _onClick() {
+    if(_isClosed) {
+      _pc.open();
+    } else {
+      _pc.close();
+    }
+  }
 
   @override
   void initState() {
@@ -27,18 +36,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SlidingUpPanel(
+        controller: _pc,
         minHeight: 50,
-        panel: ProfilePage(isClosed: _isClosed),
-        body: TimerPage(),
+        panel: ProfilePage(isClosed: _isClosed, onClick: _onClick),
+        body: TimerPage(isClosed: _isClosed),
         onPanelOpened: () {
-          setState(() {
-            _isClosed = false;
-          });
+          setState(() => _isClosed = _pc.isPanelClosed());
         },
         onPanelClosed: () {
-          setState(() {
-            _isClosed = true;
-          });
+          setState(() => _isClosed = _pc.isPanelClosed());
         },
       )
     );

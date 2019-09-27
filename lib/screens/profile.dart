@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:countdown/auth.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key key, this.isClosed}) : super(key: key);
+  ProfilePage({Key key, this.isClosed, this.onClick}) : super(key: key);
 
   final bool isClosed;
+  final onClick;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -54,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   icon: new Icon(widget.isClosed ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
                   color: Colors.white,
                   onPressed: () {
-                    print("pressed");
+                    widget.onClick();
                   },
                 ),
                 Container(
