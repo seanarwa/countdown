@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
       if(user != null) {
         print("User is signed in, redirecting to HomePage ...");
         Navigator.pushReplacementNamed(context, '/');
+        return;
       }
     });
   }

@@ -36,16 +36,8 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       body: Container(
-//        decoration: const BoxDecoration(
-//          border: Border(
-//            top: BorderSide(width: 1.0, color: Color(0xFFFFFFFFFF)),
-//            left: BorderSide(width: 1.0, color: Color(0xFFFFFFFFFF)),
-//            right: BorderSide(width: 1.0, color: Color(0xFFFFFFFFFF)),
-//            bottom: BorderSide(width: 1.0, color: Color(0xFFFFFFFFFF)),
-//          ),
-//        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

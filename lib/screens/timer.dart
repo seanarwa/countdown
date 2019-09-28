@@ -110,9 +110,9 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    if(!widget.isClosed) {
-      return Container();
-    }
+//    if(!widget.isClosed) {
+//      return Container();
+//    }
     if(duration == null) {
       return Center(child: CircularProgressIndicator());
     }
