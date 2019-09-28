@@ -29,8 +29,8 @@ exports.onUserCreate = functions.database.ref('/user/{userId}')
         return snap.ref.child('deathTime').set(deathTime);
     });
 
-// generate a random death time in seconds by defined threshold
-function generateDeathTimeInSeconds() {
+// generate a random death epoch time by defined threshold
+function generateDeathTimeInEpoch() {
 
     // set initial values of the min max values of thresholds
     var min = THRESHOLD_MIN;
@@ -43,8 +43,10 @@ function generateDeathTimeInSeconds() {
     min = THRESHOLDS[thresholdIdx];
     max = THRESHOLDS[thresholdIdx + 1];
 
+    var timeNow = Math.floor(Date.now() / 1000);
+
     // return a random number within the selected threshold
-    return randomNumberBetween(min, max);
+    return timeNow + randomNumberBetween(min, max);
 }
 
 // generates a random number between num1 and num2
