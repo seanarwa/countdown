@@ -23,6 +23,8 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
   Timer _timer;
   Map<String, int> _duration;
 
+  double _opacity = 0.0;
+  double _buttonOpacity = 0.0;
   bool _isFirstTimeUser = false;
   bool _isDead = false;
   DateTime _deathTime;
@@ -99,7 +101,7 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
         if(snapshot.value == null) {
           print("No death time found for user " + user.uid);
           print("Initializing death time for user " + user.uid + " ...");
-          setState(() => _isFirstTimeUser = true);
+          _fetchFirstDeathTime();
         } else {
           print("Successfully fetched death time from DB");
           setState(() {
@@ -109,17 +111,54 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
         }
       });
     });
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _animateUI());
+  }
+
+  void _fetchFirstDeathTime() {
+
+    setState(() => _isFirstTimeUser = true);
+
+    DatabaseReference _userRef = _db.reference().child('user');
+    Auth.getUser().then((user) {
+      if(user == null) {
+        print("ERROR: Auth user is null");
+        return;
+      }
+      _userRef.child(user.uid).onChildAdded.listen((event) {
+        if(event.snapshot.key == "deathTime") {
+          print("Successfully fetched death time from DB");
+          setState(() {
+            _deathTime = new DateTime.fromMillisecondsSinceEpoch(event.snapshot.value * 1000);
+            _startTimer();
+          });
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if(_duration == null) {
-      return _renderLoading();
-    }
+//    return _renderFirstTime();
     if(_isFirstTimeUser) {
       return _renderFirstTime();
     }
+    if(_duration == null) {
+      return _renderLoading();
+    }
     return _renderTimer();
+  }
+
+  void _animateUI() {
+    setState(() {
+      _opacity = 1.0;
+    });
+    Future.delayed(new Duration(seconds: 2), () {
+      setState(() {
+        _buttonOpacity = 1.0;
+      });
+    });
   }
 
   Widget _renderLoading() {
@@ -132,11 +171,44 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text('Looks like you are new here.\nWe are preparing your fate ...'),
-          Container(
-            margin: EdgeInsets.all(20),
-            child: CircularProgressIndicator(),
+          AnimatedOpacity(
+            // If the widget is visible, animate to 0.0 (invisible).
+            // If the widget is hidden, animate to 1.0 (fully visible).
+            opacity: _opacity,
+            duration: Duration(seconds: 2),
+            // The green box must be a child of the AnimatedOpacity widget.
+            child: Image.asset(
+              'images/app_icon.png',
+              width: 200,
+              height: 200,
+            ),
           ),
+          AnimatedOpacity(
+            // If the widget is visible, animate to 0.0 (invisible).
+            // If the widget is hidden, animate to 1.0 (fully visible).
+            opacity: _opacity,
+            duration: Duration(seconds: 4),
+            // The green box must be a child of the AnimatedOpacity widget.
+            child: Text('Looks like you are new here.\n'
+                'We are preparing your fate ...'),
+          ),
+          AnimatedOpacity(
+            opacity: _buttonOpacity,
+            duration: Duration(seconds: 2),
+            child: Container(
+              margin: EdgeInsets.all(20),
+              child: _deathTime == null ?
+              CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+              : RaisedButton(
+                child: Text("Accept your fate"),
+                onPressed: () {
+                  _isFirstTimeUser = false;
+                },
+              ),
+            ),
+          )
         ],
       ),
     );
