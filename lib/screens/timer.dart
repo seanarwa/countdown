@@ -21,8 +21,9 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
   TextStyle textStyle = TextStyle(fontWeight: FontWeight.bold);
 
   Timer _timer;
-  Map<String, int> duration;
+  Map<String, int> _duration;
 
+  bool _isFirstTimeUser = false;
   bool _isDead = false;
   DateTime _deathTime;
 
@@ -49,8 +50,8 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
     _timer = new Timer.periodic(
       oneSec,
       (Timer timer) => setState(() {
-        this.duration = _getDuration();
-        if (this.duration["totalSeconds"] < 1) {
+        this._duration = _getDuration();
+        if (this._duration["totalSeconds"] < 1) {
           timer.cancel();
           _startDeath();
         }
@@ -66,7 +67,7 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
     return TableRow(
       children: [
         AutoSizeText(
-          duration[num].toString().padLeft(2, '0'),
+          _duration[num].toString().padLeft(2, '0'),
           style: numberStyle,
           minFontSize: 50,
           textAlign: TextAlign.right,
@@ -96,11 +97,13 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
       }
       _userRef.child('${user.uid}/deathTime').once().then((snapshot) {
         if(snapshot.value == null) {
-          print("ERROR: no death time found for user " + user.uid);
+          print("No death time found for user " + user.uid);
+          print("Initializing death time for user " + user.uid + " ...");
+          setState(() => _isFirstTimeUser = true);
         } else {
           print("Successfully fetched death time from DB");
           setState(() {
-            _deathTime = new DateTime.now().add(new Duration(seconds: snapshot.value));
+            _deathTime = new DateTime.fromMillisecondsSinceEpoch(snapshot.value * 1000);
             _startTimer();
           });
         }
@@ -110,12 +113,36 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-//    if(!widget.isClosed) {
-//      return Container();
-//    }
-    if(duration == null) {
-      return Center(child: CircularProgressIndicator());
+    if(_duration == null) {
+      return _renderLoading();
     }
+    if(_isFirstTimeUser) {
+      return _renderFirstTime();
+    }
+    return _renderTimer();
+  }
+
+  Widget _renderLoading() {
+    return Center(child: CircularProgressIndicator());
+  }
+
+  Widget _renderFirstTime() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text('Looks like you are new here.\nWe are preparing your fate ...'),
+          Container(
+            margin: EdgeInsets.all(20),
+            child: CircularProgressIndicator(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderTimer() {
     return Center(
       child: Container(
         margin: EdgeInsets.only(left: 50),
