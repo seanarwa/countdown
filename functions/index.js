@@ -24,7 +24,7 @@ const THRESHOLDS = [
 exports.onUserCreate = functions.database.ref('/user/{userId}')
     .onCreate(async (snap, context) => {
         const userId = context.params.userId;
-        const deathTime = generateDeathTimeInSeconds();
+        const deathTime = generateDeathTimeInEpoch();
         console.log("Generated death time for user ", userId, " at ", deathTime);
         return snap.ref.child('deathTime').set(deathTime);
     });
