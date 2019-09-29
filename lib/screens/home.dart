@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:countdown/auth.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -37,7 +38,9 @@ class _HomePageState extends State<HomePage> {
     Auth.authState().listen((user) {
       if(user == null) {
         print("User is not signed in, redirecting to LoginPage ...");
-        Navigator.pushReplacementNamed(context, '/login');
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushNamed("/login");
+        });
         return;
       }
     });
@@ -59,8 +62,8 @@ class _HomePageState extends State<HomePage> {
         backdropEnabled: true,
         backdropOpacity: 1.0,
         color: Colors.transparent,
-        panel: ProfilePage(isClosed: _isClosed, onClick: _onClick),
-        body: TimerPage(isClosed: _isClosed),
+        panel: new ProfilePage(isClosed: _isClosed, onClick: _onClick),
+        body: new TimerPage(isClosed: _isClosed),
         onPanelOpened: _onPanelStateChanged,
         onPanelClosed: _onPanelStateChanged,
       )

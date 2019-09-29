@@ -140,7 +140,6 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-//    return _renderFirstTime();
     if(_isFirstTimeUser) {
       return _renderFirstTime();
     }

@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
     Auth.authState().listen((user) {
       if(user != null) {
         print("User is signed in, redirecting to HomePage ...");
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.of(context).pushReplacementNamed('/');
         return;
       }
     });
