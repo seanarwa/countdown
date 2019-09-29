@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:countdown/auth.dart';
@@ -38,9 +37,7 @@ class _HomePageState extends State<HomePage> {
     Auth.authState().listen((user) {
       if(user == null) {
         print("User is not signed in, redirecting to LoginPage ...");
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).pushNamed("/login");
-        });
+        Navigator.of(context).pushReplacementNamed("/login");
         return;
       }
     });
@@ -48,13 +45,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    // set forced vertical orientation
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     return Scaffold(
       body: SlidingUpPanel(
         controller: _pc,
@@ -62,8 +52,8 @@ class _HomePageState extends State<HomePage> {
         backdropEnabled: true,
         backdropOpacity: 1.0,
         color: Colors.transparent,
-        panel: new ProfilePage(isClosed: _isClosed, onClick: _onClick),
-        body: new TimerPage(isClosed: _isClosed),
+        panel: ProfilePage(isClosed: _isClosed, onClick: _onClick),
+        body: TimerPage(isClosed: _isClosed),
         onPanelOpened: _onPanelStateChanged,
         onPanelClosed: _onPanelStateChanged,
       )
