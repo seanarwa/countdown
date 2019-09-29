@@ -18,6 +18,7 @@ class App extends StatelessWidget {
 
     return MaterialApp(
       title: 'Countdown',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.black,
         canvasColor: Colors.black,
