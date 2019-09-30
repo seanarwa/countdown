@@ -10,3 +10,6 @@ Countdown is a horror and triller movie released on October 25, 2019. The mobile
 
 ## Movie Trailer
 [![Countdown Trailer](https://img.youtube.com/vi/TZsgNH17_X4/0.jpg)](https://www.youtube.com/watch?v=TZsgNH17_X4)
+
+## Application Architecture
+![Application Architecture](https://github.com/seanarwa/countdown/blob/master/docs/application_architecture.png "Application Architecture")
