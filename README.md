@@ -1,6 +1,8 @@
 # Countdown
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/seanarwa/countdown/blob/master/LICENSE) [![Build Status](https://travis-ci.com/seanarwa/countdown.svg?branch=master)](https://travis-ci.com/seanarwa/countdown)
 
+<a href='https://play.google.com/store/apps/details?id=me.seanchang.countdown&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='100' width='258'/></a>
+
 #### Death? There&#x27;s an app for that.
 
 Countdown is a horror and triller movie released on October 25, 2019. The mobile application Countdown mimics the application described and illustrated in the movie trailer. New features will be updated periodically.
