@@ -65,12 +65,12 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
     this._isDead = true;
   }
 
-  TableRow _getTableRow(num, suffix) {
+  TableRow _getTableRow(num, suffix, colors) {
     return TableRow(
       children: [
         AutoSizeText(
           _duration[num].toString().padLeft(2, '0'),
-          style: numberStyle,
+          style: TextStyle(color: colors == "red" ? Colors.red : Colors.white, fontSize: 75),
           minFontSize: 50,
           textAlign: TextAlign.right,
         ),
@@ -78,7 +78,7 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
           margin: EdgeInsets.only(left: 10),
           child: Text(
             suffix,
-            style: textStyle,
+            style: TextStyle(color: colors == "red" ? Colors.red : Colors.white),
             textAlign: TextAlign.left,
           ),
         ),
@@ -220,11 +220,31 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
         child: Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
           children: [
-            _getTableRow("years", "Y R S\n"),
-            _getTableRow("days", "D A Y\n"),
-            _getTableRow("hours", "H R S\n"),
-            _getTableRow("minutes", "M I N\n"),
-            _getTableRow("seconds", "S E C\n"),
+
+            _getTableRow("years", "Y R S\n", _duration["years"] == 0 
+                                         ? "red" : "white"),
+            
+            _getTableRow("days", "D A Y\n", _duration["days"] == 0
+                                         && _duration["years"] == 0
+                                         ? "red" : "white"),
+
+            _getTableRow("hours", "H R S\n", _duration["hours"] == 0
+                                         &&_duration["days"] == 0
+                                         && _duration["years"] == 0
+                                         ? "red" : "white"),
+
+            _getTableRow("minutes", "M I N\n", _duration["minutes"] == 0
+                                         &&_duration["hours"] == 0
+                                         &&_duration["days"] == 0
+                                         && _duration["years"] == 0
+                                         ? "red" : "white"),
+
+            _getTableRow("seconds", "S E C\n", _duration["seconds"] == 0
+                                         &&_duration["minutes"] == 0
+                                         &&_duration["hours"] == 0
+                                         &&_duration["days"] == 0
+                                         && _duration["years"] == 0
+                                         ? "red" : "white"),
           ],
         ),
       ),
