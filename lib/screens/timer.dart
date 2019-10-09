@@ -37,6 +37,7 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
     int hours = (totalSeconds ~/ 3600) % 24;
     int minutes = (totalSeconds ~/ 60) % 60;
     int seconds = totalSeconds % 60;
+    totalSeconds = years*31536000 + days*86400 + hours*3600 + minutes*60 + seconds;
     return {
       "years": years,
       "days" : days,
@@ -65,12 +66,12 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
     this._isDead = true;
   }
 
-  TableRow _getTableRow(num, suffix, colors) {
+  TableRow _getTableRow(num, suffix, color) {
     return TableRow(
       children: [
         AutoSizeText(
           _duration[num].toString().padLeft(2, '0'),
-          style: TextStyle(color: colors == "red" ? Colors.red : Colors.white, fontSize: 75),
+          style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 75),
           minFontSize: 50,
           textAlign: TextAlign.right,
         ),
@@ -78,7 +79,7 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
           margin: EdgeInsets.only(left: 10),
           child: Text(
             suffix,
-            style: TextStyle(color: colors == "red" ? Colors.red : Colors.white),
+            style: TextStyle(color: color, fontWeight: FontWeight.bold),
             textAlign: TextAlign.left,
           ),
         ),
@@ -105,7 +106,8 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
         } else {
           print("Successfully fetched death time from DB");
           setState(() {
-            _deathTime = new DateTime.fromMillisecondsSinceEpoch(snapshot.value * 1000);
+            _deathTime = new DateTime.now().add(new Duration(minutes: 1, seconds: 3));
+//            _deathTime = new DateTime.fromMillisecondsSinceEpoch(snapshot.value * 1000);
             _startTimer();
           });
         }
@@ -222,29 +224,29 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
           children: [
 
             _getTableRow("years", "Y R S\n", _duration["years"] == 0 
-                                         ? "red" : "white"),
+                                         ? Colors.red : Colors.white),
             
             _getTableRow("days", "D A Y\n", _duration["days"] == 0
                                          && _duration["years"] == 0
-                                         ? "red" : "white"),
+                                         ? Colors.red : Colors.white),
 
             _getTableRow("hours", "H R S\n", _duration["hours"] == 0
                                          &&_duration["days"] == 0
                                          && _duration["years"] == 0
-                                         ? "red" : "white"),
+                                         ? Colors.red : Colors.white),
 
             _getTableRow("minutes", "M I N\n", _duration["minutes"] == 0
                                          &&_duration["hours"] == 0
                                          &&_duration["days"] == 0
                                          && _duration["years"] == 0
-                                         ? "red" : "white"),
+                                         ? Colors.red : Colors.white),
 
             _getTableRow("seconds", "S E C\n", _duration["seconds"] == 0
                                          &&_duration["minutes"] == 0
                                          &&_duration["hours"] == 0
                                          &&_duration["days"] == 0
                                          && _duration["years"] == 0
-                                         ? "red" : "white"),
+                                         ? Colors.red : Colors.white),
           ],
         ),
       ),
