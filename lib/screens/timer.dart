@@ -106,8 +106,7 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
         } else {
           print("Successfully fetched death time from DB");
           setState(() {
-            _deathTime = new DateTime.now().add(new Duration(minutes: 1, seconds: 3));
-//            _deathTime = new DateTime.fromMillisecondsSinceEpoch(snapshot.value * 1000);
+            _deathTime = new DateTime.fromMillisecondsSinceEpoch(snapshot.value * 1000);
             _startTimer();
           });
         }
