@@ -61,12 +61,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                Text(user.displayName),
-                FlatButton(
-                  child: Text('Sign out'),
-                  textColor: Colors.white,
-                  onPressed: Auth.signOut,
+                Text(user.displayName, style: TextStyle(fontSize: 20),),
+                Expanded(
+                  child: Container(
+                    color: Colors.transparent,
+                    width: 100,
+                  ),
                 ),
+                Container(
+                  margin: EdgeInsets.all(20),
+                  child: FlatButton(
+                    child: Text('Sign out'),
+                    textColor: Colors.red[500],
+                    onPressed: Auth.signOut,
+                  ),
+                )
               ],
             ),
           ],
