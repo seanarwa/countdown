@@ -1,3 +1,4 @@
+import 'package:countdown/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -26,6 +27,9 @@ class Auth {
         if(snapshot.value == null) {
           print("New user detected. Pushing new user to db ...");
           _pushUserToDB(user);
+          Analytics.logSignUp("GOOGLE");
+        } else {
+          Analytics.logLogin("GOOGLE");
         }
       });
     });
@@ -39,6 +43,7 @@ class Auth {
       'email': user.email,
       'photo_url': user.photoUrl,
     });
+
   }
 
   static getUser() {

@@ -1,14 +1,15 @@
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import 'package:countdown/auth.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'timer.dart';
 import 'profile.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
+
+  static final String routeName = '/';
 
   @override
   _HomePageState createState() => _HomePageState();

@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,6 +8,10 @@ import 'screens/lib.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget {
+
+  static final FirebaseAnalytics _analytics = FirebaseAnalytics();
+  static final FirebaseAnalyticsObserver _analyticsObserver = FirebaseAnalyticsObserver(analytics: _analytics);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -19,6 +25,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Countdown',
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [ _analyticsObserver ],
       theme: ThemeData(
         primaryColor: Colors.black,
         canvasColor: Colors.black,
@@ -31,8 +38,8 @@ class App extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (BuildContext context) => HomePage(),
-        '/login': (BuildContext context) => LoginPage(),
+        HomePage.routeName: (BuildContext context) => HomePage(),
+        LoginPage.routeName: (BuildContext context) => LoginPage(),
       }
     );
   }

@@ -1,11 +1,13 @@
+import 'package:countdown/screens/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 import 'package:countdown/auth.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
+
+  static final String routeName = '/login';
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -19,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     Auth.authState().listen((user) {
       if(user != null) {
         print("User is signed in, redirecting to HomePage ...");
-        Navigator.of(context).pushReplacementNamed('/');
+        Navigator.of(context).pushReplacementNamed(HomePage.routeName);
         return;
       }
     });
