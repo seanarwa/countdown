@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:countdown/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TimerPage extends StatefulWidget {
   TimerPage({Key key, this.isClosed}) : super(key: key);
@@ -87,6 +88,12 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
     );
   }
 
+  void _cacheDeathTime(int deathTime) async {
+    SharedPreferences p = await SharedPreferences.getInstance();
+    p.setInt('DEATH_TIME', deathTime);
+    print("Cached DEATH_TIME=$deathTime");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -98,15 +105,28 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
         print("ERROR: Auth user is null");
         return;
       }
-      _userRef.child('${user.uid}/deathTime').once().then((snapshot) {
-        if(snapshot.value == null) {
-          print("No death time found for user " + user.uid);
-          print("Initializing death time for user " + user.uid + " ...");
-          _fetchFirstDeathTime();
+      SharedPreferences.getInstance()
+      .then((preferences) {
+        final int _cachedDeathTime = preferences.getInt('DEATH_TIME') ?? -1;
+        if(_cachedDeathTime == -1) {
+          _userRef.child('${user.uid}/deathTime').once().then((snapshot) {
+            if(snapshot.value == null) {
+              print("No death time found for user " + user.uid);
+              print("Initializing death time for user " + user.uid + " ...");
+              _fetchFirstDeathTime();
+            } else {
+              print("Successfully fetched death time from DB, DEATH_TIME=${snapshot.value}");
+              setState(() {
+                _deathTime = new DateTime.fromMillisecondsSinceEpoch(snapshot.value * 1000);
+                _cacheDeathTime(snapshot.value);
+                _startTimer();
+              });
+            }
+          });
         } else {
-          print("Successfully fetched death time from DB");
+          print("Cached death time found, using cache DEATH_TIME=$_cachedDeathTime");
           setState(() {
-            _deathTime = new DateTime.fromMillisecondsSinceEpoch(snapshot.value * 1000);
+            _deathTime = new DateTime.fromMillisecondsSinceEpoch(_cachedDeathTime * 1000);
             _startTimer();
           });
         }
@@ -132,6 +152,7 @@ class _TimerPageState extends State<TimerPage> with SingleTickerProviderStateMix
           print("Successfully fetched death time from DB");
           setState(() {
             _deathTime = new DateTime.fromMillisecondsSinceEpoch(event.snapshot.value * 1000);
+            _cacheDeathTime(event.snapshot.value);
             _startTimer();
           });
         }
