@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:countdown/screens/donation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -37,46 +38,52 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Center(
+        child: Column(
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                IconButton(
-                  icon: new Icon(widget.isClosed ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-                  color: Colors.white,
-                  onPressed: () {
-                    widget.onClick();
-                  },
+            IconButton(
+              icon: new Icon(widget.isClosed ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+              color: Colors.white,
+              onPressed: () {
+                widget.onClick();
+              },
+            ),
+            Container(
+              width: 80.0,
+              height: 80.0,
+              margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(user.photoUrl),
                 ),
-                Container(
-                  width: 80.0,
-                  height: 80.0,
-                  margin: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(user.photoUrl),
-                    ),
+              ),
+            ),
+            Text(user.displayName, style: TextStyle(fontSize: 20),),
+            Expanded(
+              child: Container(),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text('\$ Donations'),
+                    textColor: Colors.green[500],
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(DonationPage.routeName);
+                    },
                   ),
-                ),
-                Text(user.displayName, style: TextStyle(fontSize: 20),),
-                Expanded(
-                  child: Container(
-                    color: Colors.transparent,
-                    width: 100,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(20),
-                  child: FlatButton(
-                    child: Text('Sign out'),
-                    textColor: Colors.red[500],
-                    onPressed: Auth.signOut,
-                  ),
-                )
-              ],
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: FlatButton(
+                child: Text('Sign out'),
+                textColor: Colors.red[500],
+                onPressed: Auth.signOut,
+              ),
             ),
           ],
         ),

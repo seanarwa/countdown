@@ -65,7 +65,7 @@ android {
         release {
 		
             signingConfig signingConfigs.release
-			
+
             minifyEnabled false
             useProguard true
 

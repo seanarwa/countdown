@@ -1,6 +1,6 @@
 name: countdown
 description: Death? There&#x27;s an app for that.
-version: 1.2.0
+version: 1.2.0+3
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -24,6 +24,9 @@ dependencies:
   sliding_up_panel: ^0.3.6
   cached_network_image: ^2.0.0
   auto_size_text: ^2.1.0
+
+  # In App Purchases
+  in_app_purchase: ^0.3.0+3
 
   # iOS style icons
   cupertino_icons: ^0.1.2

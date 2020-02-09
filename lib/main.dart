@@ -1,3 +1,4 @@
+import 'package:countdown/screens/donation.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +37,11 @@ class App extends StatelessWidget {
           body1: TextStyle(fontSize: 14.0, fontFamily: 'TeXGyreAdventor', color: Colors.white),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: HomePage.routeName,
       routes: {
         HomePage.routeName: (BuildContext context) => HomePage(),
         LoginPage.routeName: (BuildContext context) => LoginPage(),
+        DonationPage.routeName: (BuildContext context) => DonationPage(),
       }
     );
   }
