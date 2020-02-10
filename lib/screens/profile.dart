@@ -68,7 +68,21 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FlatButton(
-                    child: Text('\$ Donations'),
+                    child: Text('Disclaimer'),
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(DonationPage.routeName);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text('\$ Donate'),
                     textColor: Colors.green[500],
                     onPressed: () {
                       Navigator.of(context).pushNamed(DonationPage.routeName);

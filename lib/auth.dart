@@ -68,7 +68,7 @@ class Auth {
     );
 
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
-    print("Signed in user: " + user.displayName);
+    print("Signed in user: ${user.displayName} (${user.uid})");
 
     _checkUserInDB();
 
