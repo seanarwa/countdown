@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:countdown/screens/disclaimer.dart';
+import 'package:countdown/screens/donation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -37,46 +39,98 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Center(
+        child: Column(
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                IconButton(
-                  icon: new Icon(widget.isClosed ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-                  color: Colors.white,
-                  onPressed: () {
-                    widget.onClick();
-                  },
+            IconButton(
+              icon: new Icon(widget.isClosed ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+              color: Colors.white,
+              onPressed: () {
+                widget.onClick();
+              },
+            ),
+            Container(
+              width: 80.0,
+              height: 80.0,
+              margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(user.photoUrl),
                 ),
-                Container(
-                  width: 80.0,
-                  height: 80.0,
-                  margin: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(user.photoUrl),
+              ),
+            ),
+            Text(user.displayName, style: TextStyle(fontSize: 20),),
+            Expanded(
+              child: Container(),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                      Icons.library_books,
+                      color: Colors.white,
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'Disclaimer',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
                     ),
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(DisclaimerPage.routeName);
+                    },
                   ),
-                ),
-                Text(user.displayName, style: TextStyle(fontSize: 20),),
-                Expanded(
-                  child: Container(
-                    color: Colors.transparent,
-                    width: 100,
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                      Icons.attach_money,
+                      color: Colors.green[500],
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(20),
-                  child: FlatButton(
-                    child: Text('Sign out'),
+                  FlatButton(
+                    child: Text(
+                      'Donate',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    textColor: Colors.green[500],
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(DonationPage.routeName);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                      Icons.exit_to_app,
+                      color: Colors.red[500],
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'Sign out',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
                     textColor: Colors.red[500],
                     onPressed: Auth.signOut,
                   ),
-                )
-              ],
+                ],
+              ),
             ),
           ],
         ),
