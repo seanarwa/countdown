@@ -1,3 +1,4 @@
+import 'package:countdown/screens/disclaimer.dart';
 import 'package:countdown/screens/donation.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -42,6 +43,7 @@ class App extends StatelessWidget {
         HomePage.routeName: (BuildContext context) => HomePage(),
         LoginPage.routeName: (BuildContext context) => LoginPage(),
         DonationPage.routeName: (BuildContext context) => DonationPage(),
+        DisclaimerPage.routeName: (BuildContext context) => DisclaimerPage(),
       }
     );
   }

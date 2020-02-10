@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:countdown/screens/disclaimer.dart';
 import 'package:countdown/screens/donation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -67,11 +68,20 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Icon(
+                      Icons.library_books,
+                      color: Colors.white,
+                  ),
                   FlatButton(
-                    child: Text('Disclaimer'),
+                    child: Text(
+                      'Disclaimer',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
                     textColor: Colors.white,
                     onPressed: () {
-                      Navigator.of(context).pushNamed(DonationPage.routeName);
+                      Navigator.of(context).pushNamed(DisclaimerPage.routeName);
                     },
                   ),
                 ],
@@ -81,8 +91,17 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Icon(
+                      Icons.attach_money,
+                      color: Colors.green[500],
+                  ),
                   FlatButton(
-                    child: Text('\$ Donate'),
+                    child: Text(
+                      'Donate',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
                     textColor: Colors.green[500],
                     onPressed: () {
                       Navigator.of(context).pushNamed(DonationPage.routeName);
@@ -93,10 +112,24 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: FlatButton(
-                child: Text('Sign out'),
-                textColor: Colors.red[500],
-                onPressed: Auth.signOut,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                      Icons.exit_to_app,
+                      color: Colors.red[500],
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'Sign out',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    textColor: Colors.red[500],
+                    onPressed: Auth.signOut,
+                  ),
+                ],
               ),
             ),
           ],

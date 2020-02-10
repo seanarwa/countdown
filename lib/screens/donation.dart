@@ -141,7 +141,13 @@ class _DonationPageState extends State<DonationPage> {
     print("ERROR: Product ID $productId not found");
   }
 
-  Column _renderTopDonors() {
+  Widget _renderLoading() {
+    return CircularProgressIndicator();
+  }
+
+  Widget _renderTopDonors() {
+
+    if(_loadingTopDonors) return _renderLoading();
 
     List<Widget> rows = [];
 
@@ -187,25 +193,54 @@ class _DonationPageState extends State<DonationPage> {
     );
   }
 
-  Widget _renderLoading() {
-    return Center(
-      child: CircularProgressIndicator(),
+  Widget _renderProducts() {
+
+    if(_loadingProducts) return _renderLoading();
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        RaisedButton(
+            child: Text("\$1 USD"),
+            onPressed: () {
+              _purchaseProductId('donation_1');
+            }
+        ),
+        RaisedButton(
+            child: Text("\$2 USD"),
+            onPressed: () {
+              _purchaseProductId('donation_2');
+            }
+        ),
+        RaisedButton(
+            child: Text("\$5 USD"),
+            onPressed: () {
+              _purchaseProductId('donation_5');
+            }
+        ),
+        RaisedButton(
+            child: Text("\$10 USD"),
+            onPressed: () {
+              _purchaseProductId('donation_10');
+            }
+        ),
+      ],
     );
+
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(_loadingProducts || _loadingTopDonors) return _renderLoading();
-
     return Scaffold(
+      appBar: AppBar(backgroundColor: Colors.transparent),
       body: Center(
         child: ListView(
           children: <Widget>[
             Column(
               children: <Widget>[
+
                 Container(
-                  margin: EdgeInsets.only(top: 50, bottom: 10),
+                  margin: EdgeInsets.only(bottom: 10),
                   child: Text(
                     "Thank you for using Countdown",
                     style: TextStyle(
@@ -215,7 +250,7 @@ class _DonationPageState extends State<DonationPage> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  margin: EdgeInsets.all(15),
                   child: Text(
                     "Please consider donating to us as we can dedicate this fund to maintain and improve this app\n\n"
                         "Donations help us fund the necessary backend infrastructure as well as add more exciting features, such as:\n"
@@ -239,35 +274,7 @@ class _DonationPageState extends State<DonationPage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    RaisedButton(
-                        child: Text("\$1 USD"),
-                        onPressed: () {
-                          _purchaseProductId('donation_1');
-                        }
-                    ),
-                    RaisedButton(
-                        child: Text("\$2 USD"),
-                        onPressed: () {
-                          _purchaseProductId('donation_2');
-                        }
-                    ),
-                    RaisedButton(
-                        child: Text("\$5 USD"),
-                        onPressed: () {
-                          _purchaseProductId('donation_5');
-                        }
-                    ),
-                    RaisedButton(
-                        child: Text("\$10 USD"),
-                        onPressed: () {
-                          _purchaseProductId('donation_10');
-                        }
-                    ),
-                  ],
-                ),
+                _renderProducts(),
                 Container(
                   margin: EdgeInsets.only(top: 20, bottom: 20),
                   child: Text(
